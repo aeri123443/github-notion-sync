@@ -35,7 +35,9 @@ export async function getProjectDeadline(issueNodeId: string) {
       variables: { issueId: issueNodeId },
     }),
   });
-  console.log(res);
+  console.log('x-ratelimit-limit', res.headers.get('x-ratelimit-limit'))
+  console.log('x-ratelimit-used', res.headers.get('x-ratelimit-used'))
+  console.log('x-ratelimit-remaining', res.headers.get('x-ratelimit-remaining'))
 
   const json = await res.json();
 

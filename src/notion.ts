@@ -15,8 +15,8 @@ type GithubIssuePayload = {
     full_name: string;
   };
   issue: {
-    id: number; // GitHub 내부 ID (고유값)
-    number: number; // 이슈 번호 (#1, #2 이런거)
+    id: number; // GitHub 내부 ID
+    number: number; // 이슈 번호 (#1, #2...)
     title: string;
     html_url: string;
     state: string;
