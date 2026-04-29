@@ -1,5 +1,5 @@
 import { Client } from "@notionhq/client";
-import { mapStatus, mapType } from "./mapper.js";
+import { mapStatus, mapAssigneesToMultiSelect } from "./mapper.js";
 
 // Notion API 클라이언트 생성
 const notion = new Client({
@@ -21,9 +21,12 @@ type GithubIssuePayload = {
     html_url: string;
     state: string;
     labels: { name: string }[];
-    assignee?: {
+    assignee?: { // 한 명
       login: string;
     } | null;
+    assignees?: { // 두 명 이상
+      login: string;
+    }[];
   };
 };
 
@@ -77,13 +80,7 @@ export async function createNotionIssuePage(payload: GithubIssuePayload, deadlin
       },
 
       "담당자": {
-        rich_text: [
-          {
-            text: {
-              content: payload.issue.assignee?.login ?? "",
-            },
-          },
-        ],
+        multi_select: mapAssigneesToMultiSelect(payload.issue.assignees),
       },
 
       "마감일": deadline
@@ -117,13 +114,7 @@ export async function updateNotionIssuePage(pageId: string, payload: GithubIssue
       },
 
       "담당자": {
-        rich_text: [
-          {
-            text: {
-              content: payload.issue.assignee?.login ?? "",
-            },
-          },
-        ],
+        multi_select: mapAssigneesToMultiSelect(payload.issue.assignees),
       },
 
       "마감일": deadline

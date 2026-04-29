@@ -18,3 +18,23 @@ export function mapType(labels: string[]) {
   // 기본값은 Feature
   return "Feature";
 }
+
+type GithubAssignee = {
+  login: string;
+};
+
+// 깃허브 ID -> 노션 이름 매핑
+export function mapAssigneesToMultiSelect(assignees: GithubAssignee[] = []) {
+  const assigneeNameMap = JSON.parse(
+    process.env.GITHUB_ASSIGNEE_NAME_MAP ?? "{}",
+  ) as Record<string, string>;
+
+  return assignees
+    .map((assignee) => {
+      const mappedName = assigneeNameMap[assignee.login] ?? "-";
+
+      return {
+        name: mappedName ?? assignee.login,
+      };
+    });
+};
